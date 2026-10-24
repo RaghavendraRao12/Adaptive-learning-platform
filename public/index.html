@@ -3,64 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Adaptive Learning Platform</title>
-    <!-- Ensure this stylesheet path matches your public folder structure -->
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Login / Register - Adaptive Learning Platform</title>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --primary-hover: #0052a3;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e2e8f0;
+        }
+
+        .auth-header h2 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .success-msg {
+            color: #10b981;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toggle-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <header class="navbar">
-        <h2>Adaptive Learning Platform</h2>
-    </header>
-
-    <main class="main-container" style="max-width: 450px; margin: 80px auto;">
-        <div class="card">
-            <h1 style="font-size: 1.5rem; margin-bottom: 6px;">Welcome Back</h1>
-            <p style="color: var(--text-muted); margin-bottom: 25px;">Log in to access your adaptive learning dashboard.</p>
-
+    <div class="auth-container">
+        <!-- Login Form -->
+        <div id="login-section">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Log in to access your adaptive learning dashboard.</p>
+            </div>
             <form id="login-form">
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" class="form-control" required placeholder="john@example.com">
                 </div>
-
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" required placeholder="••••••••••">
                 </div>
-
-                <button type="submit" class="btn-primary" style="margin-top: 10px;">Login</button>
+                <button type="submit" class="btn-primary">Login</button>
+                <div id="login-error" class="error-msg" style="display: none;">Invalid email or password.</div>
             </form>
-            
-            <div id="error-msg" style="color: #ef4444; font-size: 0.875rem; margin-top: 15px; text-align: center; display: none;"></div>
+            <div class="toggle-link">
+                Don't have an account? <a id="show-register">Register here</a>
+            </div>
         </div>
-    </main>
+
+        <!-- Register Form -->
+        <div id="register-section" style="display: none;">
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Sign up to start your adaptive learning journey.</p>
+            </div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" class="form-control" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email Address</label>
+                    <input type="email" id="register-email" class="form-control" required placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" class="form-control" required placeholder="••••••••••">
+                </div>
+                <button type="submit" class="btn-primary">Register</button>
+                <div id="register-error" class="error-msg" style="display: none;"></div>
+                <div id="register-success" class="success-msg" style="display: none;">Registration successful! You can now log in.</div>
+            </form>
+            <div class="toggle-link">
+                Already have an account? <a id="show-login">Login here</a>
+            </div>
+        </div>
+    </div>
 
     <script>
+        const loginSection = document.getElementById('login-section');
+        const registerSection = document.getElementById('register-section');
+        
+        document.getElementById('show-register').addEventListener('click', () => {
+            loginSection.style.display = 'none';
+            registerSection.style.display = 'block';
+        });
+
+        document.getElementById('show-login').addEventListener('click', () => {
+            registerSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+
+        // Handle Login Submission
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('error-msg');
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.style.display = 'none';
 
             try {
-                const response = await fetch('/api/auth/login', {
+                const res = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
+                const data = await res.json();
 
-                const data = await response.json();
-                if (data.success) {
+                if (res.ok && data.user) {
                     localStorage.setItem('user', JSON.stringify(data.user));
                     window.location.href = '/dashboard.html';
                 } else {
-                    errorMsg.textContent = data.message || 'Invalid email or password.';
-                    errorMsg.style.display = 'block';
+                    errorDiv.textContent = data.error || 'Invalid email or password.';
+                    errorDiv.style.display = 'block';
                 }
             } catch (err) {
                 console.error('Login error:', err);
-                errorMsg.textContent = 'Server connection error.';
-                errorMsg.style.display = 'block';
+                errorDiv.textContent = 'Server error during login.';
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Handle Register Submission
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            const errorDiv = document.getElementById('register-error');
+            const successDiv = document.getElementById('register-success');
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    successDiv.style.display = 'block';
+                    setTimeout(() => {
+                        registerSection.style.display = 'none';
+                        loginSection.style.display = 'block';
+                        successDiv.style.display = 'none';
+                        document.getElementById('login-email').value = email;
+                    }, 1500);
+                } else {
+                    errorDiv.textContent = data.error || 'Registration failed.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Register error:', err);
+                errorDiv.textContent = 'Server error during registration.';
+                errorDiv.style.display = 'block';
             }
         });
     </script>

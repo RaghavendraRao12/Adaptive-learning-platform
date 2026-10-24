@@ -159,9 +159,9 @@
             margin-top: 4px;
         }
 
-        .tier-Advanced { background: #dcfce7; color: #15803d; }
-        .tier-Intermediate { background: #e0f2fe; color: #0369a1; }
-        .tier-Remedial { background: #fee2e2; color: #b91c1c; }
+        .tier-Advanced, .tier-Hard { background: #dcfce7; color: #15803d; }
+        .tier-Intermediate, .tier-Medium { background: #e0f2fe; color: #0369a1; }
+        .tier-Remedial, .tier-Easy { background: #fee2e2; color: #b91c1c; }
 
         .btn-primary {
             background-color: var(--primary-color);
@@ -200,7 +200,7 @@
         .btn-outline {
             background: transparent;
             color: var(--primary-color);
-            border: 1px solid var(--primary-color);
+            border: 1px solid var(--border-color);
             padding: 6px 12px;
             border-radius: 6px;
             font-weight: 600;
@@ -213,6 +213,7 @@
 
         .btn-outline:hover {
             background-color: #f0f7ff;
+            border-color: var(--primary-color);
         }
     </style>
 </head>
@@ -251,7 +252,7 @@
 
     <script>
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) {
+        if (!user || !user.id) {
             window.location.href = '/index.html';
         } else {
             document.getElementById('user-welcome').textContent = `Welcome, ${user.name || 'Student'}`;
@@ -262,40 +263,83 @@
             window.location.href = '/index.html';
         });
 
+        // Static mapping for study material links by topic ID
+        const studyMaterialsMap = {
+            1: { 
+                title: "GeeksforGeeks: Basics of DBMS Normalization", 
+                url: "https://www.geeksforgeeks.org/normalization-in-dbms/" 
+            },
+            2: { 
+                title: "GeeksforGeeks: SQL Queries & Joins Guide", 
+                url: "https://www.geeksforgeeks.org/sql-join-set-1-inner-left-right-and-full-joins/" 
+            },
+            3: { 
+                title: "RESTfulAPI.net: HTTP Methods, Status Codes & Best Practices", 
+                url: "https://restfulapi.net/" 
+            },
+            4: { 
+                title: "Express.js Official Guide: Middleware", 
+                url: "https://expressjs.com/en/guide/using-middleware.html" 
+            },
+            5: { 
+                title: "GeeksforGeeks: Arrays & Linked Lists Guide", 
+                url: "https://www.geeksforgeeks.org/data-structures/array-data-structure/" 
+            },
+            6: { 
+                title: "GeeksforGeeks: Binary Search Trees", 
+                url: "https://www.geeksforgeeks.org/binary-search-tree-data-structure/" 
+            }
+        };
+
         async function loadDashboardData() {
             try {
+                // Fetch Overall Stats
                 const statsRes = await fetch(`/api/quiz/overall/${user.id}`);
                 const statsData = await statsRes.json();
-                if (statsData.success) {
-                    document.getElementById('stat-total-quizzes').textContent = statsData.totalQuizzes;
-                    document.getElementById('stat-avg-accuracy').textContent = `${statsData.avgAccuracy}%`;
-                }
+                document.getElementById('stat-total-quizzes').textContent = statsData.totalQuizzes || 0;
+                document.getElementById('stat-avg-accuracy').textContent = `${statsData.avgScore || 0}%`;
 
+                // Fetch Quiz History
                 const historyRes = await fetch(`/api/quiz/history/${user.id}`);
                 const historyData = await historyRes.json();
 
                 const container = document.getElementById('history-container');
-                if (historyData.success && historyData.history.length > 0) {
-                    container.innerHTML = historyData.history.map(item => `
-                        <div class="history-card">
-                            <div class="history-info">
-                                <h3>${item.subject} &rsaquo; ${item.topic}</h3>
-                                <p>Taken on: ${item.date}</p>
-                                <div style="margin-top: 6px;">
-                                    ${item.material}
+                if (Array.isArray(historyData) && historyData.length > 0) {
+                    container.innerHTML = historyData.map(item => {
+                        const accuracy = item.accuracy_pct !== undefined ? Number(item.accuracy_pct).toFixed(2) : '0.00';
+                        const tier = item.current_tier || item.difficulty || 'Remedial';
+                        const date = item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Recent';
+                        
+                        const subjectDisplay = item.subject || 'Database Management System';
+                        const topicDisplay = item.topic_name || `Topic ID: ${item.topic_id}`;
+                        
+                        const materialObj = studyMaterialsMap[item.topic_id];
+                        const materialHtml = materialObj 
+                            ? `<a href="${materialObj.url}" target="_blank" class="btn-outline">${materialObj.title}</a>` 
+                            : '';
+
+                        return `
+                            <div class="history-card">
+                                <div class="history-info">
+                                    <h3>${subjectDisplay} &rsaquo; ${topicDisplay}</h3>
+                                    <p>Taken on: ${date}</p>
+                                    <div style="margin-top: 6px;">
+                                        ${materialHtml}
+                                    </div>
+                                </div>
+                                <div class="history-stats">
+                                    <div class="accuracy-badge">${accuracy}%</div>
+                                    <div><span class="tier-badge tier-${tier}">${tier}</span></div>
                                 </div>
                             </div>
-                            <div class="history-stats">
-                                <div class="accuracy-badge">${item.accuracy}%</div>
-                                <div><span class="tier-badge tier-${item.tier}">${item.tier}</span></div>
-                            </div>
-                        </div>
-                    `).map(str => str.replace(/<a /g, '<a class="btn-outline" ')).join('');
+                        `;
+                    }).join('');
                 } else {
                     container.innerHTML = '<p style="color: var(--text-muted);">No quiz history recorded yet. Take your first quiz!</p>';
                 }
             } catch (err) {
                 console.error('Error loading dashboard:', err);
+                document.getElementById('history-container').innerHTML = '<p style="color: #ef4444;">Failed to load quiz history.</p>';
             }
         }
 

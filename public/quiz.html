@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assessment - Adaptive Learning Platform</title>
+    <title>Adaptive Quiz Assessment - Adaptive Learning Platform</title>
     <style>
         :root {
             --primary-color: #0066cc;
             --primary-hover: #0052a3;
-            --bg-color: #f0fdf4; /* Updated soft background */
+            --bg-color: #f0fdf4;
             --card-bg: #ffffff;
             --text-dark: #1e293b;
             --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --border-color: #cbd5e1;
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
         * {
@@ -32,11 +32,11 @@
         .navbar {
             background: var(--card-bg);
             padding: 16px 40px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .navbar h2 {
@@ -44,303 +44,286 @@
             font-weight: 700;
         }
 
-        .quiz-wrapper {
-            max-width: 650px;
-            margin: 40px auto;
-            padding: 0 20px;
+        .navbar a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        .quiz-card {
-            background: #ffffff;
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            background: var(--card-bg);
+            padding: 40px;
             border-radius: 12px;
-            padding: 30px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e2e8f0;
         }
 
-        .option-card {
+        .quiz-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 14px 18px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: #fafbfc;
-        }
-
-        .option-card:hover {
-            border-color: var(--primary-color);
-            background: #f0f7ff;
-        }
-
-        .option-card input[type="radio"] {
-            margin-right: 12px;
-            accent-color: var(--primary-color);
-            transform: scale(1.1);
-        }
-
-        .quiz-progress-bar-container {
-            width: 100%;
-            background: #e2e8f0;
-            border-radius: 6px;
-            height: 8px;
             margin-bottom: 25px;
+        }
+
+        .badge-timer {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .badge-progress {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 30px;
             overflow: hidden;
         }
 
-        .quiz-progress-bar-fill {
+        .progress-fill {
             height: 100%;
             background: var(--primary-color);
-            width: 10%;
+            width: 0%;
             transition: width 0.3s ease;
         }
 
-        .quiz-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
+        .question-text {
+            font-size: 1.2rem;
             font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: background 0.2s;
+            margin-bottom: 20px;
         }
 
-        .quiz-btn:hover {
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .option-label:hover {
+            background-color: #f8fafc;
+            border-color: var(--primary-color);
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            float: right;
+        }
+
+        .btn-primary:hover {
             background-color: var(--primary-hover);
         }
 
-        .btn-link {
-            text-decoration: none;
-            color: var(--primary-color);
+        .error-msg {
+            color: #ef4444;
             font-weight: 600;
-        }
-
-        .timer-badge {
-            font-size: 0.9rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            background: #fee2e2;
-            color: #b91c1c;
-            border-radius: 20px;
+            text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
 <body>
     <header class="navbar">
         <h2>Adaptive Quiz Assessment</h2>
-        <a href="/dashboard.html" class="btn-link">Dashboard</a>
+        <a href="/dashboard.html">Dashboard</a>
     </header>
 
-    <main class="quiz-wrapper">
-        <!-- Quiz Questions Box -->
-        <div id="quiz-box" class="quiz-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 id="quiz-header" style="margin: 0; font-size: 1.2rem; color: #1e293b;">Assessment Session</h3>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <span id="timer-display" class="timer-badge">--:--</span>
-                    <span id="question-counter" style="font-weight: 600; color: #0066cc;">Q1/10</span>
-                </div>
-            </div>
-
-            <!-- Visual Progress Bar -->
-            <div class="quiz-progress-bar-container">
-                <div id="progress-fill" class="quiz-progress-bar-fill"></div>
-            </div>
-
-            <div id="question-container" style="margin: 20px 0;">
-                <p id="question-text" style="font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; line-height: 1.5;"></p>
-                <div id="options-list"></div>
-            </div>
-            <button id="submit-ans-btn" class="quiz-btn">Submit Answer</button>
+    <main class="container" id="quiz-container">
+        <div class="quiz-header">
+            <span id="progress-indicator" class="badge-progress">Q1/10</span>
+            <span id="timer-display" class="badge-timer">--:--</span>
         </div>
-
-        <!-- Result & Recommendation Panel -->
-        <div id="result-panel" class="quiz-card" style="display: none; text-align: center;">
-            <h3 style="color: #2e7d32; margin-bottom: 10px;">Quiz Completed Successfully!</h3>
-            <p id="final-score-text" style="margin: 15px 0; font-size: 2rem; color: #0066cc; font-weight: bold;"></p>
-            <div id="adaptation-feedback" style="background: #f0f7ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: left; border: 1px solid #b6e0fe;"></div>
-            <a href="/dashboard.html" class="quiz-btn" style="text-decoration: none; display: inline-block; box-sizing: border-box;">Return to Dashboard</a>
+        <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        
+        <div id="question-box">
+            <p style="color: var(--text-muted); text-align: center;">Loading questions...</p>
         </div>
     </main>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const topicId = urlParams.get('topicId');
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) window.location.href = '/index.html';
+        if (!user || !user.id) {
+            window.location.href = '/index.html';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const topicId = urlParams.get('topicId') || 1;
 
         let questions = [];
-        let currentQuestionIndex = 0;
-        let scoreCount = 0;
-        let timerInterval = null;
-        let timeLeft = 0;
+        let currentIndex = 0;
+        let score = 0;
+        let timerSeconds = 300;
+        let timerInterval;
+        let difficultyTier = 'Remedial';
 
-        const questionText = document.getElementById('question-text');
-        const optionsList = document.getElementById('options-list');
-        const submitBtn = document.getElementById('submit-ans-btn');
-        const quizBox = document.getElementById('quiz-box');
-        const resultPanel = document.getElementById('result-panel');
-        const finalScoreText = document.getElementById('final-score-text');
-        const adaptationFeedback = document.getElementById('adaptation-feedback');
-        const quizHeader = document.getElementById('quiz-header');
-        const questionCounter = document.getElementById('question-counter');
-        const progressFill = document.getElementById('progress-fill');
-        const timerDisplay = document.getElementById('timer-display');
-
-        async function fetchQuestions() {
-            if (!topicId) {
-                quizHeader.textContent = "Error: No topic selected.";
-                submitBtn.style.display = 'none';
-                return;
-            }
+        async function loadQuiz() {
             try {
                 const res = await fetch(`/api/quiz/questions/${topicId}/${user.id}`);
                 const data = await res.json();
-                
-                if (data.success && data.questions.length > 0) {
-                    questions = data.questions;
-                    quizHeader.textContent = "Assessment Session";
-                    loadQuestion();
-                } else {
-                    quizHeader.textContent = "No questions found for this topic.";
-                    submitBtn.style.display = 'none';
+
+                questions = Array.isArray(data) ? data : (data.questions || []);
+                difficultyTier = data.difficulty || 'Remedial';
+                timerSeconds = data.timerDuration || 300;
+
+                if (!questions || questions.length === 0) {
+                    document.getElementById('quiz-container').innerHTML = `
+                        <p class="error-msg">No questions found for this topic.</p>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a href="/select-topic.html" class="btn-primary" style="float: none; display: inline-block;">Back to Topics</a>
+                        </div>
+                    `;
+                    return;
                 }
+
+                startTimer();
+                renderQuestion();
             } catch (err) {
-                console.error('Error fetching questions:', err);
-                quizHeader.textContent = "Error loading questions.";
+                console.error('Error loading quiz:', err);
+                document.getElementById('quiz-container').innerHTML = '<p class="error-msg">Failed to load quiz questions.</p>';
             }
         }
 
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function startTimer(difficulty) {
-            clearInterval(timerInterval);
-
-            // 5 mins for remedial, 3 mins for medium, 1 min for hard
-            if (difficulty === 'Advanced' || difficulty === 'Hard') {
-                timeLeft = 60; // 1 minute
-            } else if (difficulty === 'Intermediate' || difficulty === 'Medium') {
-                timeLeft = 180; // 3 minutes
-            } else {
-                timeLeft = 300; // 5 minutes for Remedial / Easy
-            }
-
-            timerDisplay.textContent = formatTime(timeLeft);
-
+        function startTimer() {
+            const timerDisplay = document.getElementById('timer-display');
             timerInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = formatTime(timeLeft);
-
-                if (timeLeft <= 0) {
+                if (timerSeconds <= 0) {
                     clearInterval(timerInterval);
-                    handleTimeout();
+                    submitQuiz();
+                    return;
                 }
+                timerSeconds--;
+                const mins = Math.floor(timerSeconds / 60);
+                const secs = timerSeconds % 60;
+                timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             }, 1000);
         }
 
-        function handleTimeout() {
-            currentQuestionIndex++;
-            loadQuestion();
-        }
-
-        function loadQuestion() {
-            if (currentQuestionIndex < questions.length) {
-                const q = questions[currentQuestionIndex];
-                questionCounter.textContent = `Q${currentQuestionIndex + 1}/${questions.length}`;
-                
-                const progressPct = ((currentQuestionIndex + 1) / questions.length) * 100;
-                progressFill.style.width = `${progressPct}%`;
-
-                questionText.textContent = q.question_text;
-                optionsList.innerHTML = '';
-
-                startTimer(q.difficulty);
-
-                let options = [];
-                try {
-                    options = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
-                } catch (e) {
-                    console.error('Error parsing options JSON:', e);
-                }
-
-                options.forEach(opt => {
-                    const label = document.createElement('label');
-                    label.className = 'option-card';
-                    label.innerHTML = `
-                        <input type="radio" name="quiz-option" value="${opt}">
-                        <span style="font-size: 1rem; color: #333;">${opt}</span>
-                    `;
-                    optionsList.appendChild(label);
-                });
-
-                submitBtn.textContent = (currentQuestionIndex === questions.length - 1) ? "Submit Quiz" : "Submit Answer";
-            } else {
+        function renderQuestion() {
+            if (currentIndex >= questions.length) {
                 clearInterval(timerInterval);
-                finishQuiz();
-            }
-        }
-
-        submitBtn.addEventListener('click', () => {
-            const selected = document.querySelector('input[name="quiz-option"]:checked');
-            if (!selected) {
-                alert('Please select an option before continuing.');
+                submitQuiz();
                 return;
             }
 
-            clearInterval(timerInterval);
+            const q = questions[currentIndex];
+            document.getElementById('progress-indicator').textContent = `Q${currentIndex + 1}/${questions.length}`;
+            document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / questions.length) * 100}%`;
 
-            const q = questions[currentQuestionIndex];
-            if (selected.value.trim() === q.correct_opt.trim()) {
-                scoreCount++;
+            let optionsArray = q.options;
+            if (typeof optionsArray === 'string') {
+                try { optionsArray = JSON.parse(optionsArray); } catch (e) { optionsArray = []; }
             }
 
-            currentQuestionIndex++;
-            loadQuestion();
-        });
+            const optionsHtml = Array.isArray(optionsArray) 
+                ? optionsArray.map((opt, idx) => `
+                    <label class="option-label">
+                        <input type="radio" name="quiz-option" value="${escapeHtml(opt)}">
+                        <span>${opt}</span>
+                    </label>
+                  `).join('')
+                : '';
 
-        async function finishQuiz() {
-            quizBox.style.display = 'none';
-            resultPanel.style.display = 'block';
+            const isLastQuestion = currentIndex === questions.length - 1;
+            const buttonText = isLastQuestion ? 'Submit' : 'Next Question';
 
-            const percentage = Math.round((scoreCount / questions.length) * 100);
-            finalScoreText.textContent = `${percentage}% Accuracy (${scoreCount}/${questions.length} Correct)`;
+            document.getElementById('question-box').innerHTML = `
+                <div class="question-text">${currentIndex + 1}. ${q.question_text || q.text}</div>
+                <div class="options-list">
+                    ${optionsHtml}
+                </div>
+                <button id="next-btn" class="btn-primary">${buttonText}</button>
+            `;
+
+            document.getElementById('next-btn').addEventListener('click', handleNext);
+        }
+
+        function handleNext() {
+            const selected = document.querySelector('input[name="quiz-option"]:checked');
+            if (!selected) {
+                alert('Please select an option before proceeding.');
+                return;
+            }
+
+            const q = questions[currentIndex];
+            const correctOpt = q.correct_answer || q.correct_opt;
+
+            if (selected.value.trim() === correctOpt.trim()) {
+                score++;
+            }
+
+            currentIndex++;
+            renderQuestion();
+        }
+
+        async function submitQuiz() {
+            const accuracyPct = (score / questions.length) * 100;
 
             try {
-                const response = await fetch('/api/quiz/evaluate', {
+                await fetch('/api/quiz/performance', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         userId: user.id,
-                        topicId: topicId,
-                        scorePercentage: percentage
+                        topicId: Number(topicId),
+                        score: accuracyPct,
+                        difficulty: difficultyTier
                     })
                 });
-
-                const data = await response.json();
-                if (data.success) {
-                    adaptationFeedback.innerHTML = `
-                        <p style="margin-bottom: 10px;"><strong>Performance Tier:</strong> ${data.tier}</p>
-                        <p style="margin-bottom: 10px;"><strong>Feedback:</strong> ${data.recommendation}</p>
-                        <p style="margin: 0;"><strong>Recommended Resource:</strong> ${data.material}</p>
-                    `;
-                }
             } catch (err) {
-                console.error('Evaluation error:', err);
-                adaptationFeedback.innerHTML = `<p>Error saving quiz results to server.</p>`;
+                console.error('Error saving performance:', err);
             }
+
+            document.getElementById('quiz-container').innerHTML = `
+                <div style="text-align: center; padding: 20px 0;">
+                    <h2 style="margin-bottom: 15px; font-size: 1.8rem; color: var(--text-dark);">Quiz Completed!</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 25px; color: var(--text-muted);">Your Accuracy: <strong style="color: var(--primary-color);">${accuracyPct.toFixed(2)}%</strong> (${score}/${questions.length} correct)</p>
+                    <a href="/dashboard.html" class="btn-primary" style="float: none; display: inline-block; text-align: center; padding: 12px 30px;">Go to Dashboard</a>
+                </div>
+            `;
         }
 
-        fetchQuestions();
+        function escapeHtml(text) {
+            return text.replace(/"/g, '&quot;');
+        }
+
+        loadQuiz();
     </script>
 </body>
 </html>

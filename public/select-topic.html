@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Topic - Adaptive Learning Platform</title>
+    <title>Select Assessment Path - Adaptive Learning Platform</title>
     <style>
         :root {
             --primary-color: #0066cc;
             --primary-hover: #0052a3;
-            --bg-color: #f0fdf4; /* Updated soft background */
+            --bg-color: #f0fdf4;
             --card-bg: #ffffff;
             --text-dark: #1e293b;
             --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --border-color: #cbd5e1;
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
@@ -33,11 +32,11 @@
         .navbar {
             background: var(--card-bg);
             padding: 16px 40px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .navbar h2 {
@@ -45,169 +44,181 @@
             font-weight: 700;
         }
 
-        .main-container {
-            max-width: 550px;
-            margin: 60px auto;
-            padding: 0 20px;
+        .navbar a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        .card {
+        .container {
+            max-width: 650px;
+            margin: 80px auto;
             background: var(--card-bg);
+            padding: 40px;
             border-radius: 12px;
-            padding: 35px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            border: 1px solid #e2e8f0;
+        }
+
+        .container h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .container p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
 
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             font-weight: 600;
+            font-size: 0.9rem;
             margin-bottom: 8px;
             color: var(--text-dark);
-            font-size: 0.95rem;
         }
 
-        .form-control {
+        select {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border-color);
+            padding: 12px 16px;
             border-radius: 8px;
+            border: 1px solid var(--border-color);
             font-size: 1rem;
             background-color: #fff;
             color: var(--text-dark);
             outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s;
         }
 
-        .form-control:focus {
+        select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
 
-        .btn-start-quiz {
+        .btn-primary {
+            width: 100%;
             background-color: var(--primary-color);
             color: #ffffff;
             border: none;
-            padding: 14px 20px;
+            padding: 14px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
-            width: 100%;
             margin-top: 10px;
-            box-shadow: 0 2px 4px rgba(0, 102, 204, 0.2);
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease;
         }
 
-        .btn-start-quiz:hover:not(:disabled) {
+        .btn-primary:hover {
             background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
         }
 
-        .btn-start-quiz:disabled {
+        .btn-primary:disabled {
             background-color: #cbd5e1;
-            box-shadow: none;
             cursor: not-allowed;
-        }
-
-        .btn-link {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 600;
         }
     </style>
 </head>
 <body>
     <header class="navbar">
         <h2>Adaptive Learning Platform</h2>
-        <a href="/dashboard.html" class="btn-link">Dashboard</a>
+        <a href="/dashboard.html">Dashboard</a>
     </header>
 
-    <main class="main-container">
-        <div class="card">
-            <h1 style="font-size: 1.5rem; margin-bottom: 8px;">Choose Your Assessment Path</h1>
-            <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">Select a subject and topic to begin your assessment session.</p>
+    <main class="container">
+        <h2>Choose Your Assessment Path</h2>
+        <p>Select a subject and topic to begin your assessment session.</p>
 
-            <div class="form-group">
-                <label for="subject-select">1. Select Subject:</label>
-                <select id="subject-select" class="form-control">
-                    <option value="">-- Choose a Subject --</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="topic-select">2. Select Topic:</label>
-                <select id="topic-select" class="form-control" disabled>
-                    <option value="">-- Select Subject First --</option>
-                </select>
-            </div>
-
-            <button id="start-quiz-btn" class="btn-start-quiz" disabled>Start Quiz</button>
+        <div class="form-group">
+            <label for="subject-select">1. Select Subject:</label>
+            <select id="subject-select">
+                <option value="">-- Choose a Subject --</option>
+            </select>
         </div>
+
+        <div class="form-group">
+            <label for="topic-select">2. Select Topic:</label>
+            <select id="topic-select" disabled>
+                <option value="">-- Select Subject First --</option>
+            </select>
+        </div>
+
+        <button id="start-quiz-btn" class="btn-primary" disabled>Start Quiz</button>
     </main>
 
     <script>
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) window.location.href = '/index.html';
+        if (!user || !user.id) {
+            window.location.href = '/index.html';
+        }
 
         const subjectSelect = document.getElementById('subject-select');
         const topicSelect = document.getElementById('topic-select');
-        const startBtn = document.getElementById('start-quiz-btn');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
 
+        // Load Subjects on Page Load
         async function loadSubjects() {
             try {
                 const res = await fetch('/api/quiz/subjects');
-                const data = await res.json();
-                if (data.success) {
-                    data.subjects.forEach(subject => {
-                        const opt = document.createElement('option');
-                        opt.value = subject;
-                        opt.textContent = subject;
-                        subjectSelect.appendChild(opt);
+                const subjects = await res.json();
+
+                if (Array.isArray(subjects)) {
+                    subjects.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.subject;
+                        option.textContent = item.subject;
+                        subjectSelect.appendChild(option);
                     });
                 }
             } catch (err) {
-                console.error('Error fetching subjects:', err);
+                console.error('Error loading subjects:', err);
             }
         }
 
+        // When Subject Changes, Load Corresponding Topics
         subjectSelect.addEventListener('change', async () => {
             const selectedSubject = subjectSelect.value;
-            topicSelect.innerHTML = '<option value="">-- Select a Topic --</option>';
-            startBtn.disabled = true;
+            topicSelect.innerHTML = '<option value="">-- Select Topic --</option>';
+            topicSelect.disabled = true;
+            startQuizBtn.disabled = true;
 
-            if (!selectedSubject) {
-                topicSelect.disabled = true;
-                return;
-            }
+            if (!selectedSubject) return;
 
             try {
-                const res = await fetch(`/api/quiz/topics/${encodeURIComponent(selectedSubject)}`);
-                const data = await res.json();
-                if (data.success && data.topics.length > 0) {
-                    data.topics.forEach(topic => {
-                        const opt = document.createElement('option');
-                        opt.value = topic.topic_id;
-                        opt.textContent = topic.topic_name;
-                        topicSelect.appendChild(opt);
+                const res = await fetch(`/api/quiz/topics?subject=${encodeURIComponent(selectedSubject)}`);
+                const topics = await res.json();
+
+                if (Array.isArray(topics) && topics.length > 0) {
+                    topics.forEach(topic => {
+                        const option = document.createElement('option');
+                        // Use topic_id or id depending on schema
+                        option.value = topic.topic_id !== undefined ? topic.topic_id : topic.id;
+                        option.textContent = topic.topic_name || topic.name;
+                        topicSelect.appendChild(option);
                     });
                     topicSelect.disabled = false;
                 }
             } catch (err) {
-                console.error('Error fetching topics:', err);
+                console.error('Error loading topics:', err);
             }
         });
 
+        // Enable Start Quiz Button when a topic is selected
         topicSelect.addEventListener('change', () => {
-            startBtn.disabled = !topicSelect.value;
+            if (topicSelect.value) {
+                startQuizBtn.disabled = false;
+            } else {
+                startQuizBtn.disabled = true;
+            }
         });
 
-        startBtn.addEventListener('click', () => {
+        // Redirect to quiz page with selected topic ID
+        startQuizBtn.addEventListener('click', () => {
             const topicId = topicSelect.value;
             if (topicId) {
                 window.location.href = `/quiz.html?topicId=${topicId}`;
